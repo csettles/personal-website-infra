@@ -29,7 +29,8 @@ export class WebsiteStack extends cdk.Stack {
       cors: [{
         allowedMethods: [s3.HttpMethods.GET],
         allowedOrigins: [`https://${DOMAIN_NAME}`],
-      }]
+      }],
+      versioned: false,
     })
 
     const viewerCert = ViewerCertificate.fromAcmCertificate(cert, {
@@ -92,12 +93,12 @@ export class WebsiteStack extends cdk.Stack {
       }
     }))
 
-    new route53.ARecord(this, 'WebsiteARecord', {
+    new route53.ARecord(this, 'ARecord', {
       zone: hz,
       target: route53.RecordTarget.fromAlias(new CloudFrontTarget(cfDist))
     })
 
-    new route53.ARecord(this, 'WebsiteARecord', {
+    new route53.ARecord(this, 'SubdomainARecord', {
       zone: hz,
       recordName: "*",
       target: route53.RecordTarget.fromAlias(new CloudFrontTarget(cfDist))
@@ -105,7 +106,7 @@ export class WebsiteStack extends cdk.Stack {
 
     new BucketDeployment(this, 'BucketDeployment', {
       destinationBucket: bucket,
-      sources: [Source.asset("./src")]
+      sources: [Source.asset("C:/Users/Caitlin/Projects/website-src/build")]
     })
   }
 }
