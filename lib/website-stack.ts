@@ -106,7 +106,8 @@ export class WebsiteStack extends cdk.Stack {
 
     new BucketDeployment(this, 'BucketDeployment', {
       destinationBucket: bucket,
-      sources: [Source.asset("C:/Users/Caitlin/Projects/website-src/build")]
+      sources: [Source.asset("../personal-website/build")],
+      memoryLimit: 1024
     })
   }
 }
